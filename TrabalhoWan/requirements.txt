@@ -1,0 +1,8 @@
+# Dependências do projeto - Árvore de Decisão CART com Gini
+# Para instalar: pip install -r requirements.txt
+
+# Computação numérica e manipulação de dados
+numpy>=1.23.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+
