@@ -1,6 +1,6 @@
 # 📊 Explicação Detalhada: Como Funciona o Modelo de Árvore de Decisão
 
-Executar: py .\arvoreGini.py
+Executar: arvoreGini.py
 
 ## 🎯 Objetivo do Projeto
 
