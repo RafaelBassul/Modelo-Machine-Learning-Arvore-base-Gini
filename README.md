@@ -1,5 +1,7 @@
 # 📊 Explicação Detalhada: Como Funciona o Modelo de Árvore de Decisão
 
+Executar: py .\arvoreGini.py
+
 ## 🎯 Objetivo do Projeto
 
 Este projeto usa **Machine Learning** para prever se o preço de fechamento das ações da Petrobras (PETR3 e PETR4) vai **subir** (Alta) ou **descer** (Baixa) no próximo dia de negociação, baseado em indicadores técnicos calculados a partir dos dados históricos.
