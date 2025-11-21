@@ -46,7 +46,7 @@ def executar_pipeline(caminho_csv: Path, max_profundidade: Optional[int] = None)
     print(f"Acuracia no conjunto de teste: {desempenho:.3f}")
     print("\nGerando grafico da arvore de decisao...")
     caminho_fig = caminho_csv.with_name("arvore_decisao.png")
-    plotar_arvore(arvore, caminho_saida=caminho_fig, nomes_atributos=atributos)
+    plotar_arvore(arvore, caminho_saida=caminho_fig, nomes_atributos=atributos, acuracia=desempenho)
 
 
 if __name__ == "__main__":
