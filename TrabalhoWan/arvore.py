@@ -9,15 +9,15 @@ from typing import Optional, Tuple
 class No:
     """Estrutura do nó da árvore de decisão."""
     def __init__(self, atributo=None, corte=None, esquerda=None, direita=None, classe=None, impureza=None, impureza_media_ponderada=None, n_alta=None, n_baixa=None):
-        self.atributo = atributo  # indice do atributo (j)
-        self.corte = corte        # valor de corte (s)
-        self.esquerda = esquerda  # subarvore: x_j <= s
-        self.direita = direita    # subarvore: x_j > s
-        self.classe = classe      # classe da folha (se for no terminal)
-        self.impureza = impureza  # impureza de Gini do nó (antes da divisão)
-        self.impureza_media_ponderada = impureza_media_ponderada  # impureza média após a melhor divisão
-        self.n_alta = n_alta      # número de amostras da classe "Alta" no nó
-        self.n_baixa = n_baixa    # número de amostras da classe "Baixa" no nó
+        self.atributo = atributo  
+        self.corte = corte       
+        self.esquerda = esquerda 
+        self.direita = direita    
+        self.classe = classe      
+        self.impureza = impureza 
+        self.impureza_media_ponderada = impureza_media_ponderada 
+        self.n_alta = n_alta     
+        self.n_baixa = n_baixa 
 
 
 def gini(y):
@@ -37,13 +37,13 @@ def classe_majoritaria(y):
 def criterio_parada(dados, profundidade, max_profundidade):
     """Verifica se deve parar a construção da árvore."""
     X, y = dados
-    # No puro: todas as classes iguais
+    
     if len(set(y)) <= 1:
         return True
-    # Profundidade maxima
+    
     if max_profundidade is not None and profundidade >= max_profundidade:
         return True
-    # Poucas amostras (opcional)
+    
     if len(y) < 2:
         return True
     return False
@@ -118,7 +118,7 @@ def construir_arvore(dados, profundidade=0, max_profundidade=None):
     X, y = dados
     impureza_atual = gini(y)
     
-    # Conta amostras por classe
+    
     contagem = Counter(y)
     n_alta = contagem.get("Alta", 0)
     n_baixa = contagem.get("Baixa", 0)
@@ -127,11 +127,11 @@ def construir_arvore(dados, profundidade=0, max_profundidade=None):
         classe_folha = classe_majoritaria(y)
         return No(classe=classe_folha, impureza=impureza_atual, impureza_media_ponderada=None, n_alta=n_alta, n_baixa=n_baixa)
 
-    # Escolhe a melhor divisao (atributo j, valor s) e retorna também a impureza média
+    
     j, s, imp_media = melhor_divisao(dados)
     dados_esq, dados_dir = dividir_dados(dados, j, s)
 
-    # Cria o no atual e constroi as subarvores recursivamente
+    
     no = No(atributo=j, corte=s, impureza=impureza_atual, impureza_media_ponderada=imp_media, n_alta=n_alta, n_baixa=n_baixa)
     no.esquerda = construir_arvore(dados_esq, profundidade + 1, max_profundidade)
     no.direita = construir_arvore(dados_dir, profundidade + 1, max_profundidade)
@@ -147,12 +147,6 @@ def calcular_impureza_total(no: No) -> float:
     usando a soma ponderada das impurezas de todas as folhas.
     Alternativamente, pode ser obtida recursivamente usando as impurezas médias
     ponderadas dos nós internos (raízes de subárvores).
-    
-    Args:
-        no: Nó raiz da árvore de decisão
-        
-    Returns:
-        Impureza total da árvore
     """
     def coletar_folhas(node: No) -> list:
         """Coleta todas as folhas da árvore."""
@@ -166,14 +160,14 @@ def calcular_impureza_total(no: No) -> float:
                 folhas.extend(coletar_folhas(node.direita))
         return folhas
     
-    # Calcula usando as folhas (método mais direto)
+    
     folhas = coletar_folhas(no)
     n_total = sum((folha.n_alta or 0) + (folha.n_baixa or 0) for folha in folhas)
     
     if n_total == 0:
         return 0.0
     
-    # Soma ponderada das impurezas das folhas
+    
     impureza_total = 0.0
     for folha in folhas:
         n_folha = (folha.n_alta or 0) + (folha.n_baixa or 0)
