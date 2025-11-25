@@ -21,10 +21,6 @@ from visualizacao import plotar_arvore
 def executar_pipeline(caminho_csv: Path, max_profundidade: Optional[int] = None) -> None:
     """
     Executa o pipeline completo: carregamento, preparação, treinamento e avaliação.
-    
-    Args:
-        caminho_csv: Caminho para o arquivo CSV com dados da Bovespa
-        max_profundidade: Profundidade máxima da árvore (None = sem limite)
     """
     print("Carregando dados de PETR3 e PETR4...")
     df = carregar_dados_petroleo(caminho_csv)
