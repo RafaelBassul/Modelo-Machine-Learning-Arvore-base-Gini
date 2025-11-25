@@ -1,5 +1,8 @@
 # 📊 Resumo Executivo: Predição PETR3/PETR4 com CART
 
+## 🎯 Arvore Gerada
+![arvore](https://raw.githubusercontent.com/RafaelBassul/Modelo-Machine-Learning-Arvore-base-Gini/refs/heads/main/ArvoreGerada.png)
+
 ## 🎯 Objetivo
 Prever se o fechamento das ações da Petrobras será **Alta** ou **Baixa** no dia seguinte, utilizando técnicas de Machine Learning em dados históricos da B3.
 
