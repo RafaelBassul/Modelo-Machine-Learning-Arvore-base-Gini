@@ -21,8 +21,8 @@ def _atribuir_posicoes(no: No) -> Dict[No, Tuple[float, float]]:
     os nós de forma que os folhas não se sobreponham.
     """
     posicoes: Dict[No, Tuple[float, float]] = {}
-    espacamento_horizontal = 4.0  # Espaçamento horizontal entre folhas
-    espacamento_vertical = 2.0    # Espaçamento vertical entre níveis
+    espacamento_horizontal = 4.0
+    espacamento_vertical = 2.0
     
     def calcular_posicao(node: No, profundidade: int, x_inicial: float) -> float:
         """Calcula a posição x do nó e retorna a próxima posição x disponível."""
@@ -113,16 +113,15 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
         bbox = dict(boxstyle="round,pad=0.5", fc=facecolor, ec="black", alpha=0.85, lw=1.5)
         # Ajusta tamanho da fonte
         if node.classe is None:
-            fontsize = 7  # 3 linhas: atributo, Gini, amostras
+            fontsize = 7
         else:
-            fontsize = 7.5  # 3 linhas: classe, Gini, amostras
+            fontsize = 7.5
         ax.text(x, y, label, ha="center", va="center", fontsize=fontsize, color="white", bbox=bbox, weight="bold")
         
         # Adiciona impureza média abaixo do nó (apenas para nós internos que têm essa informação)
         if node.classe is None and node.impureza_media_ponderada is not None:
             imp_media_str = f"Imp.Med: {node.impureza_media_ponderada:.3f}"
-            # Posiciona o texto abaixo do nó (ajusta o offset vertical)
-            offset_y = -0.4  # Espaçamento abaixo do nó
+            offset_y = -0.4
             ax.text(x, y + offset_y, imp_media_str, ha="center", va="top", 
                    fontsize=7, color="black", weight="bold",
                    bbox=dict(boxstyle="round,pad=0.3", fc="lightgray", ec="black", alpha=0.8, lw=1))
