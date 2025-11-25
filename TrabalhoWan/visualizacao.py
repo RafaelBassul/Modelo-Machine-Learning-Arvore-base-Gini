@@ -136,7 +136,6 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
         ys = [p[1] for p in todas_posicoes]
         margem_x = (max(xs) - min(xs)) * 0.1 if max(xs) != min(xs) else 2.0
         margem_y = (max(ys) - min(ys)) * 0.1 if max(ys) != min(ys) else 1.0
-        # Adiciona espaço extra na parte inferior para a impureza média
         margem_y_inferior = 0.6
         ax.set_xlim(min(xs) - margem_x, max(xs) + margem_x)
         ax.set_ylim(min(ys) - margem_y - margem_y_inferior, max(ys) + margem_y)
@@ -148,18 +147,15 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
     
     # Adiciona acurácia e impureza total no canto superior direito
     if acuracia is not None:
-        # Usa coordenadas da figura (0-1) para posicionar no canto superior direito
         texto_acuracia = f"Acurácia no conjunto de teste: {acuracia:.3f}"
         texto_impureza = f"Impureza total da árvore: {impureza_total:.3f}"
         
-        # Posiciona a acurácia
         fig.text(0.98, 0.98, texto_acuracia, 
                 ha="right", va="top", 
                 fontsize=12, weight="bold",
                 bbox=dict(boxstyle="round,pad=0.5", fc="white", ec="black", alpha=0.9, lw=1.5),
                 transform=fig.transFigure)
         
-        # Posiciona a impureza total logo abaixo da acurácia
         fig.text(0.98, 0.94, texto_impureza, 
                 ha="right", va="top", 
                 fontsize=12, weight="bold",
