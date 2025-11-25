@@ -9,7 +9,6 @@ from typing import Dict, Optional, Tuple
 
 from arvore import No, calcular_impureza_total
 
-# Configura backend do matplotlib
 if "MPLBACKEND" not in os.environ:
     matplotlib.use("Agg")
 
@@ -27,26 +26,21 @@ def _atribuir_posicoes(no: No) -> Dict[No, Tuple[float, float]]:
     def calcular_posicao(node: No, profundidade: int, x_inicial: float) -> float:
         """Calcula a posição x do nó e retorna a próxima posição x disponível."""
         if node.classe is not None:
-            # Nó folha: ocupa apenas uma posição
             posicoes[node] = (x_inicial, -profundidade * espacamento_vertical)
             return x_inicial + espacamento_horizontal
         
-        # Nó interno: precisa posicionar filhos primeiro
         x_atual = x_inicial
         x_esquerda = None
         x_direita = None
         
-        # Posiciona subárvore esquerda
         if node.esquerda is not None:
             x_atual = calcular_posicao(node.esquerda, profundidade + 1, x_atual)
             x_esquerda = posicoes[node.esquerda][0]
         
-        # Posiciona subárvore direita
         if node.direita is not None:
             x_atual = calcular_posicao(node.direita, profundidade + 1, x_atual)
             x_direita = posicoes[node.direita][0]
         
-        # Centraliza o nó pai entre seus filhos
         if x_esquerda is not None and x_direita is not None:
             x_medio = (x_esquerda + x_direita) / 2.0
         elif x_esquerda is not None:
@@ -67,13 +61,6 @@ def _atribuir_posicoes(no: No) -> Dict[No, Tuple[float, float]]:
 def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Optional[Path] = None, nomes_atributos: Optional[list] = None, acuracia: Optional[float] = None) -> None:
     """
     Plota a árvore de decisão em um gráfico.
-    
-    Args:
-        no: Nó raiz da árvore de decisão
-        figsize: Tamanho da figura (largura, altura)
-        caminho_saida: Caminho para salvar o gráfico (opcional)
-        nomes_atributos: Lista com nomes dos atributos (opcional, usa X1, X2... se não fornecido)
-        acuracia: Acurácia no conjunto de teste para exibir no gráfico (opcional)
     """
     posicoes = _atribuir_posicoes(no)
     fig, ax = plt.subplots(figsize=figsize)
@@ -91,13 +78,11 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
 
         impureza_str = f"Gini: {node.impureza:.3f}" if node.impureza is not None else "Gini: N/A"
         
-        # Formata contagem de amostras por classe
         n_alta = node.n_alta if node.n_alta is not None else 0
         n_baixa = node.n_baixa if node.n_baixa is not None else 0
         amostras_str = f"classe: alta = {n_alta} // baixa = {n_baixa}"
         
         if node.classe is None:
-            # Nó interno: mostra nome do atributo, Gini e contagem de amostras (sem impureza média dentro)
             if nomes_atributos is not None and node.atributo < len(nomes_atributos):
                 nome_atributo = nomes_atributos[node.atributo]
             else:
@@ -106,19 +91,16 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
             label = f"{nome_atributo} <= {node.corte:.3f}\n{impureza_str}\n{amostras_str}"
             facecolor = "#1f77b4"
         else:
-            # Folha: mostra classe, Gini e contagem de amostras
             label = f"Classe {node.classe}\n{impureza_str}\n{amostras_str}"
             facecolor = "#ff7f0e"
 
         bbox = dict(boxstyle="round,pad=0.5", fc=facecolor, ec="black", alpha=0.85, lw=1.5)
-        # Ajusta tamanho da fonte
         if node.classe is None:
             fontsize = 7
         else:
             fontsize = 7.5
         ax.text(x, y, label, ha="center", va="center", fontsize=fontsize, color="white", bbox=bbox, weight="bold")
         
-        # Adiciona impureza média abaixo do nó (apenas para nós internos que têm essa informação)
         if node.classe is None and node.impureza_media_ponderada is not None:
             imp_media_str = f"Imp.Med: {node.impureza_media_ponderada:.3f}"
             offset_y = -0.4
@@ -128,8 +110,6 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
 
     desenhar(no)
     
-    # Ajusta os limites do eixo para garantir que todos os nós sejam visíveis
-    # Inclui espaço extra na parte inferior para a impureza média
     todas_posicoes = list(posicoes.values())
     if todas_posicoes:
         xs = [p[0] for p in todas_posicoes]
@@ -142,10 +122,8 @@ def plotar_arvore(no: No, figsize: Tuple[int, int] = (30, 15), caminho_saida: Op
     
     ax.set_axis_off()
     
-    # Calcula a impureza total da árvore
     impureza_total = calcular_impureza_total(no)
     
-    # Adiciona acurácia e impureza total no canto superior direito
     if acuracia is not None:
         texto_acuracia = f"Acurácia no conjunto de teste: {acuracia:.3f}"
         texto_impureza = f"Impureza total da árvore: {impureza_total:.3f}"
