@@ -10,12 +10,6 @@ from typing import List, Tuple
 def carregar_dados_petroleo(caminho_csv: Path) -> pd.DataFrame:
     """
     Carrega e filtra dados das ações PETR3 e PETR4 do arquivo CSV.
-    
-    Args:
-        caminho_csv: Caminho para o arquivo CSV com dados da Bovespa
-        
-    Returns:
-        DataFrame com dados filtrados e limpos
     """
     df = pd.read_csv(
         caminho_csv,
@@ -43,12 +37,6 @@ def adicionar_atributos_tecnicos(df: pd.DataFrame) -> Tuple[pd.DataFrame, List[s
     
     A variável alvo "classe_alvo" indica se o preço de fechamento do dia seguinte
     será maior ("Alta") ou menor/igual ("Baixa") ao preço de fechamento atual.
-    
-    Args:
-        df: DataFrame com dados financeiros
-        
-    Returns:
-        Tupla com (DataFrame enriquecido, lista de nomes dos atributos)
     """
     agrupado = df.groupby("Ticker", group_keys=False)
     df["retorno_diario"] = agrupado["Close"].pct_change()
@@ -57,7 +45,6 @@ def adicionar_atributos_tecnicos(df: pd.DataFrame) -> Tuple[pd.DataFrame, List[s
     df["volatilidade_5"] = agrupado["retorno_diario"].transform(lambda s: s.rolling(window=5, min_periods=5).std())
     df["amplitude_pct"] = (df["High"] - df["Low"]) / df["Open"].replace(0, np.nan)
     
-    # Cria variável alvo: compara fechamento do dia seguinte com fechamento atual
     df["alvo_futuro"] = agrupado["Close"].shift(-1)
     df["classe_alvo"] = np.where(df["alvo_futuro"] > df["Close"], "Alta", "Baixa")
     
@@ -83,14 +70,6 @@ def dividir_treino_teste(
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Divide os dados em conjuntos de treino e teste.
-    
-    Args:
-        X: Matriz de features
-        y: Vetor de classes
-        proporcao_treino: Proporção dos dados para treino (padrão: 0.8)
-        
-    Returns:
-        Tupla com (X_treino, y_treino, X_teste, y_teste)
     """
     limite = int(len(X) * proporcao_treino)
     if limite == 0 or limite == len(X):
@@ -98,4 +77,5 @@ def dividir_treino_teste(
     X_treino, X_teste = X[:limite], X[limite:]
     y_treino, y_teste = y[:limite], y[limite:]
     return X_treino, y_treino, X_teste, y_teste
+
 
